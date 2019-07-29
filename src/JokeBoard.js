@@ -10,11 +10,12 @@ export default  class JokeBoard extends Component {
   constructor(props) {
 		super(props);
 		this.state = { 
-			jokes: [] 
+			jokes: [],
+			loading: true
 		};
 		this.thumbsDown = this.thumbsDown.bind(this);
 		this.thumbsUp = this.thumbsUp.bind(this);
-		this.generateJokes = this.generateJokes.bind(this)
+		// this.generateJokes = this.generateJokes.bind(this)
 
 	};
 
@@ -27,7 +28,6 @@ thumbsUp(id, updatedScore){
 		}
 		return joke
 	})
-	console.log('updateJokes',updateJokes)
 	this.setState({ jokes: updateJokes })
 }
 
@@ -39,26 +39,41 @@ thumbsDown(id, updatedScore){
 		}
 		return joke
 	})
-	console.log('updateJokes',updateJokes)
 	this.setState({ jokes: updateJokes })
 }
 // generate 10 jokes
 async componentDidMount(){
 
-	for(let i =0; i< 10; i++){
-		const response = await axios.get(BASE_API_URL, {'headers': {"Accept": "application/json"}})
-		let newJoke = {
-			id: response.data.id,
-			joke: response.data.joke,
-			netScore: 0,
+	// for(let i =0; i< 10; i++){
+	// 	const response = await axios.get(BASE_API_URL, {'headers': {"Accept": "application/json"}})
+	// 	let newJoke = {
+	// 		id: response.data.id,
+	// 		joke: response.data.joke,
+	// 		netScore: 0,
+	// 	}
+
+		let duplicateJokes = new Set();
+		let jokes = [];
+		
+		while (this.state.jokes.length < 10) {
+			const response = await axios.get(BASE_API_URL, {'headers': {"Accept": "application/json"}})
+			let newJoke = {
+				id: response.data.id,
+				joke: response.data.joke,
+				netScore: 0,
 		}
-		const jokes = [...this.state.jokes, newJoke]
-		this.setState({jokes: jokes})
+		if (!duplicateJokes.has(newJoke)) {
+			duplicateJokes.add(newJoke);
+			this.state.jokes.push(newJoke);
+		}
+		this.setState({jokes: jokes, loading: false});
 	}
 }
 generateJokes(){
 	return(
 	<div>
+		<h1> Please vote for jokes!</h1>
+
 		{this.state.jokes.map( j =>
 			<Joke 
 			joke={j.joke}
@@ -73,12 +88,11 @@ generateJokes(){
 	)
 }
 
-render()
-{
+render(){
+ console.log(this.state.jokes)
 	return(
 		<div>
-			<h1> Please vote for jokes!</h1>
-			{this.generateJokes()}
+			{this.state.loading ? <h1>Loading....</h1> : <div>{this.generateJokes()}</div>}
 		</div>
 	)
 }

@@ -12,7 +12,10 @@ class Joke extends Component {
     this.handleUpVote = this.handleUpVote.bind(this);
     this.handleDownVote = this.handleDownVote.bind(this);
     };
-
+  // only render when this is true!
+// shouldComponentUpdate(nextProps, nextState){
+// return this.props.isLit !== nextProps.isLit
+// }
 handleUpVote(evt){
     evt.preventDefault();
     this.state.netScore += 1;
