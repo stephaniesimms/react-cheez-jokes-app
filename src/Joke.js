@@ -13,9 +13,9 @@ class Joke extends Component {
     this.handleDownVote = this.handleDownVote.bind(this);
     };
   // only render when this is true!
-// shouldComponentUpdate(nextProps, nextState){
-// return this.props.isLit !== nextProps.isLit
-// }
+shouldComponentUpdate(nextProps, nextState){
+return this.props.netScore !== nextProps.netScore
+}
 handleUpVote(evt){
     evt.preventDefault();
     this.state.netScore += 1;
@@ -31,12 +31,12 @@ handleDownVote(evt){
 render() {
     const { id, joke, netScore } = this.props;
     return (
-        <p id={id}>
-            { joke }
-            <a onClick={this.handleUpVote} >👍 </a>
-            <a onClick={this.handleDownVote}>👎</a>
-            <span style={{marginLeft:`10px`}}>Score: { netScore }</span>
-        </p>
+        <tr id={id}>
+            <th>{ joke } </th>
+            <th><a onClick={this.handleUpVote} >  👍</a></th>
+            <th><a onClick={this.handleDownVote}> 👎</a></th>
+            <th><span style={{marginLeft:`10px`}}>{ netScore }</span></th>
+        </tr>
     )
 }
 }
