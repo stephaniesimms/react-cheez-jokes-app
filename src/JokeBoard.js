@@ -21,7 +21,7 @@ export default  class JokeBoard extends Component {
 
 	};
 
-// find joke by id and add one to netScore
+// find joke by id and update its score in store & update the local storage
 thumbsUp(id, updatedScore){
 	// console.log(updatedJoke)
 	const updateJokes = this.state.jokes.map(joke => {
@@ -34,7 +34,7 @@ thumbsUp(id, updatedScore){
 	ls.set('joke', updateJokes);
 }
 
-// find joke by id and subtract one from netScore
+// find joke by id and update its score in store & update the local storage
 thumbsDown(id, updatedScore){
 	const updateJokes = this.state.jokes.map(joke => {
 		if (joke.id === id) {
@@ -72,6 +72,7 @@ sortJokesScore(){
 	return this.state.jokes.sort((a,b) => (a.netScore < b.netScore)? 1 :(a.netScore === b.netScore)? ((a.size < b.size)? 1 : -1): -1)
 }
 
+// when component did mount get jokes from local storage
 componentDidMount(){
 	const jokes = ls.get('joke');
 	console.log(jokes)
@@ -79,6 +80,7 @@ componentDidMount(){
 	this.setState({jokes: jokes, loading: false});
 }
 
+// generate html template for jokes
 generateJokes(){
 	return(
 	<div>

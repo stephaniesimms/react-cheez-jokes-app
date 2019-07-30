@@ -16,12 +16,15 @@ class Joke extends Component {
 shouldComponentUpdate(nextProps, nextState){
 return this.props.netScore !== nextProps.netScore
 }
+
+// handle thumbs up vote
 handleUpVote(evt){
     evt.preventDefault();
     this.state.netScore += 1;
     this.props.thumbsUp(this.props.id, this.state.netScore);
 }
 
+// handle thumbs down vote
 handleDownVote(evt){
     evt.preventDefault();
     this.state.netScore -= 1;
